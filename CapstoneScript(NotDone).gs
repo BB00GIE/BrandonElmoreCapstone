@@ -2,6 +2,7 @@
 let time = /(When: )[a-zA-Z0-9\–\ \,:]*/
 let google = /https?:\/\/(meet)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
 let zoom = /(http(s)?:\/\/)?(us05web)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
+let zoomTime = /(Time:\ )[a-zA-Z0-9:\ (),]*/
 //Google Sheet Link
 let sheet_id = "https://docs.google.com/spreadsheets/d/1RlhGTQgOkR0SQRxI2_0iNYM_zy3ZmeYJDja15rtIFPk/edit#gid=0";
 
@@ -16,7 +17,7 @@ function main(){
 function retrieveMessages() {
   var links = []
   //console.log(GmailApp.getInboxUnreadCount())
-  var threads = GmailApp.getStarredThreads(0,4); 
+  var threads = GmailApp.getStarredThreads(0,20); 
   for (var i = 0; i< threads.length; i++){
     var messages = threads[i].getMessages();
     for (var x = 0; x< messages.length;x++) {
@@ -29,10 +30,10 @@ function retrieveMessages() {
       if (hi != null){
         links.push([sender,hi[0], id, "google"]);
       }
-      //var bye = body.match(zoom)
-      //if (bye != null){
-        //links.push([sender,bye[0], id, "Zoom"])
-      //}
+      var bye = body.match(zoom)
+      if (bye != null){
+        links.push([sender,bye[0], id, "Zoom"])
+      }
     }
   }
     
@@ -137,6 +138,7 @@ function getDates(linksList){
     var message = GmailApp.getMessageById(linksList[i][2]);
     //console.log(message.getPlainBody().match(time))
     var dates = message.getPlainBody().match(time)
+    var zoomDates = message.getPlainBody().match(zoomTime)
     
     //console.log("The Dates are here for message " + (i+1))
     if (dates != null){
@@ -150,6 +152,17 @@ function getDates(linksList){
       console.log(extractedDate)
       console.log(extractedDate2)
 
+      linksList[i].push(extractedDate)
+      linksList[i].push(extractedDate2)
+    }else if(zoomDates != null){
+      zoomDates = zoomDates[0]
+      console.log(zoomDates)
+      //zoomDates = zoomDates[0].slice(6)
+      console.log(zoomDates)
+      zoomDates = zoomDates.slice(6,27)
+      var extractedDate = new Date(zoomDates)
+      var extractedDate2 = new Date(extractedDate.getTime()+ (60*60*1000))
+      
       linksList[i].push(extractedDate)
       linksList[i].push(extractedDate2)
     }else{
@@ -196,8 +209,6 @@ function convertTimes(time){
   return out;
   //console.log(out)
 }
-
-
 
 
 
