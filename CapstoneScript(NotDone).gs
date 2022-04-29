@@ -1,7 +1,7 @@
 //RegEx formulas add to this when looking for other links
 let time = /(When: )[a-zA-Z0-9\–\ \,:]*/
 let google = /https?:\/\/(meet)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
-let zoom = /(http(s)?:\/\/)?(us05web)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
+let zoom = /(http(s)?:\/\/)?(us[0-9]*web)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
 let zoomTime = /(Time:\ )[a-zA-Z0-9:\ (),]*/
 //Google Sheet Link
 let sheet_id = "https://docs.google.com/spreadsheets/d/1RlhGTQgOkR0SQRxI2_0iNYM_zy3ZmeYJDja15rtIFPk/edit#gid=0";
@@ -209,6 +209,16 @@ function convertTimes(time){
   return out;
   //console.log(out)
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
